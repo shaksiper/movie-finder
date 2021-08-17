@@ -14,6 +14,7 @@ class SearchController extends Controller
     * */
     public function showForm()
     {
+        //show random movies in the frontpage
         $movies = Movie::inRandomOrder()->limit(10)->get();
         return view('search.form', ['movies' => $movies]);
     }

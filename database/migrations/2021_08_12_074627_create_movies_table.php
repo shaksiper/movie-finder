@@ -17,6 +17,7 @@ class CreateMoviesTable extends Migration
             $table->id();
             $table->string('imdb_id')->unique();
             $table->string('name');
+            $table->string('url')->unique();
             $table->text('image');
             $table->float('rating');
             $table->integer('metascore')->nullable();

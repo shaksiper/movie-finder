@@ -21,5 +21,4 @@ Route::get('/', function () {
 Route::get('/search', [SearchController::class, 'showForm'])->name('search');
 Route::post('/search', [SearchController::class, 'findMovie']);
 Route::get('/search/autocomplete', [SearchController::class, 'autocomplete']);
-Route::get('/movie/{movie:id}', [SearchController::class, 'serve'])->name('serve.movie');
-Route::get('/scraper', [ ScraperController::class, 'scraper' ]);
+Route::get('/movie/{movie:url}', [SearchController::class, 'serve'])->name('serve.movie');
