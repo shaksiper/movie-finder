@@ -26,8 +26,10 @@ class SearchController extends Controller
     * */
     public function findMovie(Request $request)
     {
-        $movie = Movie::where(['name' => $request->input('name')])->firstOrFail();
-        return view('search.result', ['movie'=> $movie]);
+        /* $movie = Movie::where(['name' => $request->input('name')])->firstOrFail(); */
+        //Not matching an exact name
+        $movie = Movie::where('name', 'LIKE', "%{$request->input('name')}%")->firstOrFail();
+        return view('search.result', ['movie'=> $movie, 'trailer'=> $this->apiRequest($movie)]);
     }
 
     /*
@@ -35,6 +37,7 @@ class SearchController extends Controller
     * */
     public function serve(Movie $movie)
     {
+        $apiRequest = $this->apiRequest($movie);
         return view('search.result', ['movie'=> $movie]);
     }
     /*
@@ -51,5 +54,17 @@ class SearchController extends Controller
             ->get();
 
         return response()->json($response);
+    }
+
+    public function apiRequest(Movie $movie)
+    {
+        $apiKey = 'd2b1c2298093b6a80271b3b3cac17780';
+        $link = "https://api.themoviedb.org/3/movie/$movie->imdb_id/videos?api_key=$apiKey&language=en-US&external_source=imdb_id";
+        dump($link);
+        $response = Http::get($link)->json();
+        if (empty($response['results'])) {
+            return null;
+        }
+        return $response;
     }
 }
